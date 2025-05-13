@@ -1,7 +1,7 @@
 import pool from '../config/db.js';
 
 // Top Scorers
-app.get('/api/stats/top-scorers', async (req, res) => {
+export const top_scorers = async (req, res) => {
   try {
     const [rows] = await pool.query(`
       SELECT p.id, p.name, p.team, COUNT(g.id) as goals
@@ -16,10 +16,10 @@ app.get('/api/stats/top-scorers', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
 
 // Top Assists
-app.get('/api/stats/top-assists', async (req, res) => {
+export const top_assists = async (req, res) => {
   try {
     const [rows] = await pool.query(`
       SELECT p.id, p.name, p.team, COUNT(a.id) as assists
@@ -34,10 +34,10 @@ app.get('/api/stats/top-assists', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
 
 // Most Cards
-app.get('/api/stats/most-cards', async (req, res) => {
+export const most_cards = async (req, res) => {
   try {
     const [rows] = await pool.query(`
       SELECT p.id, p.name, p.team, 
@@ -55,10 +55,10 @@ app.get('/api/stats/most-cards', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
 
 // Team Standings
-app.get('/api/stats/team-standings', async (req, res) => {
+export const team_standings = async (req, res) => {
   try {
     const [rows] = await pool.query(`
       SELECT 
@@ -88,10 +88,10 @@ app.get('/api/stats/team-standings', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
 
 // Recent Matches
-app.get('/api/stats/recent-matches', async (req, res) => {
+export const recent_matches = async (req, res) => {
   try {
     const [rows] = await pool.query(`
       SELECT id, home_team, away_team, home_score, away_score, match_date, status
@@ -104,4 +104,4 @@ app.get('/api/stats/recent-matches', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};

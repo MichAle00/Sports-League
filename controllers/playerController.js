@@ -1,7 +1,7 @@
 import pool from '../config/db.js';
 
 // Players API routes
-app.get('/api/players', async (req, res) => {
+export const get_players = async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT * FROM players');
     res.json(rows);
@@ -9,9 +9,9 @@ app.get('/api/players', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
 
-app.get('/api/players/search', async (req, res) => {
+export const search = async (req, res) => {
   const searchTerm = req.query.term;
   try {
     const [rows] = await pool.query(
@@ -23,9 +23,9 @@ app.get('/api/players/search', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
 
-app.get('/api/players/:id', async (req, res) => {
+export const search_stats = async (req, res) => {
   const playerId = req.params.id;
   try {
     // Get player info
@@ -52,9 +52,9 @@ app.get('/api/players/:id', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
 
-app.post('/api/players', async (req, res) => {
+export const add_player = async (req, res) => {
   const { name, team, position, jersey_number, age } = req.body;
   try {
     const [result] = await pool.query(
@@ -67,9 +67,9 @@ app.post('/api/players', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
 
-app.put('/api/players/:id', async (req, res) => {
+export const update_player = async (req, res) => {
   const playerId = req.params.id;
   const { name, team, position, jersey_number, age } = req.body;
   try {
@@ -83,9 +83,9 @@ app.put('/api/players/:id', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
 
-app.delete('/api/players/:id', async (req, res) => {
+export const del_player = async (req, res) => {
   const playerId = req.params.id;
   try {
     await pool.query('DELETE FROM players WHERE id = ?', [playerId]);
@@ -94,4 +94,4 @@ app.delete('/api/players/:id', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};

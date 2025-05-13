@@ -1,16 +1,18 @@
 import { Router } from 'express';
-import {
-    getTeamsBySport,
-    addTeam,
-    updateTeam,
-    deleteTeam
+import { 
+    top_scorers,
+    top_assists,
+    most_cards,
+    team_standings,
+    recent_matches
 } from '../controllers/statsController.js';
 
 const router = Router();
-
-router.get('/:sportId', getTeamsBySport);
-router.post('/', addTeam);
-router.put('/:id', updateTeam);
-router.delete('/:id', deleteTeam);
-
+ 
+router.get('/top-scorers/:sportId', top_scorers);
+router.get('/top-assists/:sportId', top_assists);
+router.get('/most-cards/:sportId', most_cards);
+router.get('/team-standings/:sportId', team_standings);
+router.get('/recent-matches/:sportId', recent_matches);
+ 
 export default router;

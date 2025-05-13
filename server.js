@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import sportsRouter from "./routes/sports.js";
 import teamsRouter from "./routes/teams.js";
+import statsRouter from "./routes/stats.js";
+import playersRouter from "./routes/players.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -18,6 +20,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/api/sports", sportsRouter);
 app.use("/api/teams", teamsRouter);
+app.use("/api/stats", statsRouter);
+app.use("/api/players", playersRouter);
 
 
 app.listen(PORT, () => {
