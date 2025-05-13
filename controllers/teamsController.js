@@ -1,7 +1,7 @@
 import pool from '../config/db.js';
 
 // Teams API routes
-app.get('/api/teams', async (req, res) => {
+export const get_team = async (req, res) => {
   try {
     const [rows] = await pool.query('SELECT * FROM teams');
     res.json(rows);
@@ -9,9 +9,9 @@ app.get('/api/teams', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
 
-app.get('/api/teams/:id', async (req, res) => {
+export const spec_team = async (req, res) => {
   const teamId = req.params.id;
   try {
     const [team] = await pool.query('SELECT * FROM teams WHERE id = ?', [teamId]);
@@ -50,9 +50,9 @@ app.get('/api/teams/:id', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
 
-app.post('/api/teams', async (req, res) => {
+export const addTeam = async (req, res) => {
   const { name, city, founded_year, stadium, coach } = req.body;
   try {
     const [result] = await pool.query(
@@ -65,9 +65,9 @@ app.post('/api/teams', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
 
-app.put('/api/teams/:id', async (req, res) => {
+export const upd_team = async (req, res) => {
   const teamId = req.params.id;
   const { name, city, founded_year, stadium, coach } = req.body;
   try {
@@ -81,9 +81,9 @@ app.put('/api/teams/:id', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
 
-app.delete('/api/teams/:id', async (req, res) => {
+export const del_team = async (req, res) => {
   const teamId = req.params.id;
   try {
     await pool.query('DELETE FROM teams WHERE id = ?', [teamId]);
@@ -92,4 +92,4 @@ app.delete('/api/teams/:id', async (req, res) => {
     console.error(err);
     res.status(500).send('Server Error');
   }
-});
+};
