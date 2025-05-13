@@ -4,6 +4,7 @@ import sportsRouter from "./routes/sports.js";
 import teamsRouter from "./routes/teams.js";
 import statsRouter from "./routes/stats.js";
 import playersRouter from "./routes/players.js";
+import matchesRouter from "./routes/matches.js";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -22,6 +23,7 @@ app.use("/api/sports", sportsRouter);
 app.use("/api/teams", teamsRouter);
 app.use("/api/stats", statsRouter);
 app.use("/api/players", playersRouter);
+app.use("/api/matches", matchesRouter);
 
 
 app.listen(PORT, () => {
