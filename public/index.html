@@ -1,16 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Sports Web Page</title>
-	<link rel="stylesheet" href="/css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sports League Manager</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .hero-section {
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 100px 0;
+    }
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #0d6efd;
+    }
+    .match-card {
+      transition: transform 0.3s;
+    }
+    .match-card:hover {
+      transform: translateY(-5px);
+    }
+    .navbar {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
 </head>
 <body>
-	<h1>Sports Web Page</h1>
-	<div id="sports-container" class="card-container"></div>
-	<div id="teams-container" class="card-container"></div>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">
+        <i class="fas fa-trophy me-2"></i>Sports League Manager
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#features">Features</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#matches">Matches</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#about">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/manage">Manage League</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-	<script type="module" src="/js/main.js"></script>
+  <!-- Hero Section -->
+  <section class="hero-section text-center">
+    <div class="container">
+      <h1 class="display-4 fw-bold mb-4">Manage Your Sports League Like a Pro</h1>
+      <p class="lead mb-5">Streamline your league operations with our powerful management tools</p>
+      <div class="d-flex justify-content-center gap-3">
+        <a href="/manage" class="btn btn-primary btn-lg px-4">Get Started</a>
+        <a href="#features" class="btn btn-outline-light btn-lg px-4">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-5 bg-light">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold">Powerful Features</h2>
+        <p class="text-muted">Everything you need to run your sports league efficiently</p>
+      </div>
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="feature-icon">
+                <i class="fas fa-calendar-alt"></i>
+              </div>
+              <h4>Match Scheduling</h4>
+              <p class="text-muted">Easily schedule matches, set locations, and manage dates with our intuitive interface.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="feature-icon">
+                <i class="fas fa-table"></i>
+              </div>
+              <h4>League Tables</h4>
+              <p class="text-muted">Automatic league table generation based on match results and team performance.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+              <div class="feature-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <h4>Player Stats</h4>
+              <p class="text-muted">Track player performance with detailed statistics and analytics.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Upcoming Matches -->
+  <section id="matches" class="py-5">
+    <div class="container">
+      <div class="text-center mb-5">
+        <h2 class="fw-bold">Upcoming Matches</h2>
+        <p class="text-muted">Check out the next exciting games in our league</p>
+      </div>
+      <div class="row g-4" id="matchesContainer">
+        <!-- Matches will be loaded here via JavaScript -->
+        <div class="col-12 text-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-4">
+        <a href="/manage" class="btn btn-outline-primary">View All Matches</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-5 bg-light">
+    <div class="container">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h2 class="fw-bold mb-4">About Sports League Manager</h2>
+          <p class="lead">The ultimate solution for organizing and managing your sports league.</p>
+          <p>Our platform was designed by sports enthusiasts for sports enthusiasts. We understand the challenges of managing teams, schedules, and results, and we've created a tool that makes it all simple.</p>
+          <p>Whether you're running a small local league or a larger competitive tournament, our system scales to meet your needs.</p>
+          <a href="/manage" class="btn btn-primary mt-3">Start Managing Your League</a>
+        </div>
+        <div class="col-lg-6">
+          <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Team huddle" class="img-fluid rounded shadow">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5><i class="fas fa-trophy me-2"></i>Sports League Manager</h5>
+          <p class="text-muted">The best tool for managing your sports league.</p>
+        </div>
+        <div class="col-md-3">
+          <h5>Quick Links</h5>
+          <ul class="list-unstyled">
+            <li><a href="/" class="text-decoration-none text-muted">Home</a></li>
+            <li><a href="#features" class="text-decoration-none text-muted">Features</a></li>
+            <li><a href="/manage" class="text-decoration-none text-muted">Manage League</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3">
+          <h5>Contact</h5>
+          <ul class="list-unstyled text-muted">
+            <li><i class="fas fa-envelope me-2"></i> info@leaguemanager.com</li>
+            <li><i class="fas fa-phone me-2"></i> (123) 456-7890</li>
+          </ul>
+        </div>
+      </div>
+      <hr class="my-4 bg-secondary">
+      <div class="text-center text-muted">
+        <small>&copy; 2023 Sports League Manager. All rights reserved.</small>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Custom JavaScript for loading matches -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load upcoming matches
+      fetch('/api/matches')
+        .then(response => response.json())
+        .then(matches => {
+          const matchesContainer = document.getElementById('matchesContainer');
+          matchesContainer.innerHTML = '';
+          
+          // Sort matches by date and get the next 3 upcoming
+          const now = new Date();
+          const upcomingMatches = matches
+            .filter(match => new Date(match.matchDate) >= now)
+            .sort((a, b) => new Date(a.matchDate) - new Date(b.matchDate))
+            .slice(0, 3);
+          
+          if (upcomingMatches.length === 0) {
+            matchesContainer.innerHTML = `
+              <div class="col-12">
+                <div class="alert alert-info">No upcoming matches scheduled yet.</div>
+              </div>
+            `;
+            return;
+          }
+          
+          upcomingMatches.forEach(match => {
+            const matchDate = new Date(match.matchDate);
+            const matchCard = document.createElement('div');
+            matchCard.className = 'col-md-4';
+            matchCard.innerHTML = `
+              <div class="card match-card h-100">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-start mb-3">
+                    <span class="badge bg-${getStatusColor(match.status)}">${match.status}</span>
+                    <small class="text-muted">${matchDate.toLocaleDateString()}</small>
+                  </div>
+                  <div class="text-center mb-3">
+                    <h5>${match.homeTeam} vs ${match.awayTeam}</h5>
+                  </div>
+                  <div class="text-center">
+                    <p class="mb-1"><i class="fas fa-map-marker-alt me-2"></i>${match.location}</p>
+                  </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                  <a href="/manage" class="btn btn-sm btn-outline-primary w-100">View Details</a>
+                </div>
+              </div>
+            `;
+            matchesContainer.appendChild(matchCard);
+          });
+        })
+        .catch(error => {
+          console.error('Error loading matches:', error);
+          document.getElementById('matchesContainer').innerHTML = `
+            <div class="col-12">
+              <div class="alert alert-danger">Failed to load matches. Please try again later.</div>
+            </div>
+          `;
+        });
+      
+      // Helper function to get status color
+      function getStatusColor(status) {
+        switch(status) {
+          case 'scheduled': return 'primary';
+          case 'ongoing': return 'warning';
+          case 'completed': return 'success';
+          case 'postponed': return 'danger';
+          default: return 'secondary';
+        }
+      }
+    });
+  </script>
 </body>
 </html>
