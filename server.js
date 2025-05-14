@@ -7,6 +7,7 @@ import playersRouter from "./routes/players.js";
 import matchesRouter from "./routes/matches.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import dbInitRouter from './routes/dbInit.js';
 
 
 const app = express();
@@ -24,8 +25,10 @@ app.use("/api/teams", teamsRouter);
 app.use("/api/stats", statsRouter);
 app.use("/api/players", playersRouter);
 app.use("/api/matches", matchesRouter);
+app.use('/api', dbInitRouter);
 
 
 app.listen(PORT, () => {
-	console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
+
