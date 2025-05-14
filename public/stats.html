@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estadisticas de liga | Sports League Manager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .stat-card {
+      transition: transform 0.2s;
+      height: 100%;
+    }
+    .stat-card:hover {
+      transform: translateY(-5px);
+    }
+    .player-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+    .table-responsive {
+      overflow-x: auto;
+    }
+    .team-logo {
+      width: 30px;
+      height: 30px;
+      margin-right: 8px;
+      object-fit: contain;
+    }
+    .badge-lg {
+      font-size: 1rem;
+      padding: 0.5em 0.8em;
+    }
+    .section-title {
+      border-bottom: 2px solid #dee2e6;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <i class="fas fa-trophy me-2"></i>Liga
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="matches.html">Partidos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="players.html">Jugadores</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="teams.html">Equipos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="stats.html">Estadisticas</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <div class="row mb-4">
+      <div class="col-12">
+        <h1><i class="fas fa-chart-line me-2"></i>Estadisticas de liga</h1>
+        <p class="text-muted">Estadisticas y perspectivas de la liga.</p>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row mb-5">
+      <div class="col-md-3 mb-4">
+        <div class="card stat-card border-primary">
+          <div class="card-body text-center">
+            <h5 class="card-title text-primary">Mejor anotador</h5>
+            <div id="topScorer" class="d-flex justify-content-center align-items-center">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-4">
+        <div class="card stat-card border-success">
+          <div class="card-body text-center">
+            <h5 class="card-title text-success">Más asistencias</h5>
+            <div id="topAssister" class="d-flex justify-content-center align-items-center">
+              <div class="spinner-border text-success" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-4">
+        <div class="card stat-card border-warning">
+          <div class="card-body text-center">
+            <h5 class="card-title text-warning">Más tarjetas amarillas</h5>
+            <div id="mostYellows" class="d-flex justify-content-center align-items-center">
+              <div class="spinner-border text-warning" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 mb-4">
+        <div class="card stat-card border-danger">
+          <div class="card-body text-center">
+            <h5 class="card-title text-danger">Más tarjetas rojas</h5>
+            <div id="mostReds" class="d-flex justify-content-center align-items-center">
+              <div class="spinner-border text-danger" role="status">
+                <span class="visually-hidden">Cargando...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Standings -->
+    <div class="row mb-5">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <h3 class="mb-0"><i class="fas fa-flag me-2"></i>Estadisticas de equipo</h3>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-hover" id="standingsTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Equipo</th>
+                    <th>PJ</th>
+                    <th>V</th>
+                    <th>E</th>
+                    <th>D</th>
+                    <th>GF</th>
+                    <th>GC</th>
+                    <th>DG</th>
+                    <th>Pts</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Will be populated by JavaScript -->
+                  <tr>
+                    <td colspan="10" class="text-center">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Cargando...</span>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Player Statistics -->
+    <div class="row">
+      <!-- Top Scorers -->
+      <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header bg-success text-white">
+            <h3 class="mb-0"><i class="fas fa-futbol me-2"></i>Mejores anotadores</h3>
+          </div>
+          <div class="card-body">
+            <div id="topScorersList">
+              <div class="text-center">
+                <div class="spinner-border text-success" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Assists -->
+      <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header bg-info text-white">
+            <h3 class="mb-0"><i class="fas fa-assist me-2"></i>Mejores asistencias</h3>
+          </div>
+          <div class="card-body">
+            <div id="topAssistsList">
+              <div class="text-center">
+                <div class="spinner-border text-info" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Most Cards -->
+      <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header bg-warning text-dark">
+            <h3 class="mb-0"><i class="fas fa-card me-2"></i>Más tarjetas amarillas</h3>
+          </div>
+          <div class="card-body">
+            <div id="mostYellowCardsList">
+              <div class="text-center">
+                <div class="spinner-border text-warning" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Most Red Cards -->
+      <div class="col-lg-6 mb-4">
+        <div class="card h-100">
+          <div class="card-header bg-danger text-white">
+            <h3 class="mb-0"><i class="fas fa-card me-2"></i>Más tarjetas rojas</h3>
+          </div>
+          <div class="card-body">
+            <div id="mostRedCardsList">
+              <div class="text-center">
+                <div class="spinner-border text-danger" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Matches -->
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header bg-secondary text-white">
+            <h3 class="mb-0"><i class="fas fa-history me-2"></i>Partidos recientes</h3>
+          </div>
+          <div class="card-body">
+            <div id="recentMatchesList">
+              <div class="text-center">
+                <div class="spinner-border text-secondary" role="status">
+                  <span class="visually-hidden">Cargando...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+      <p>&copy; 2023 Sports League Manager. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Load all stats
+      loadQuickStats();
+      loadTeamStandings();
+      loadTopScorers();
+      loadTopAssists();
+      loadMostCards();
+      loadRecentMatches();
+      
+      // Load quick stats (top performers)
+      function loadQuickStats() {
+        fetch('/api/stats/top-scorers')
+          .then(response => response.json())
+          .then(data => {
+            if (data.length > 0) {
+              const topScorer = data[0];
+              document.getElementById('topScorer').innerHTML = `
+                <img src="https://via.placeholder.com/40" alt="${topScorer.name}" class="player-avatar">
+                <div class="text-start">
+                  <strong>${topScorer.name}</strong><br>
+                  <small>${topScorer.team} • ${topScorer.goals || 0} goals</small>
+                </div>
+              `;
+            }
+          });
+        
+        fetch('/api/stats/top-assists')
+          .then(response => response.json())
+          .then(data => {
+            if (data.length > 0) {
+              const topAssister = data[0];
+              document.getElementById('topAssister').innerHTML = `
+                <img src="https://via.placeholder.com/40" alt="${topAssister.name}" class="player-avatar">
+                <div class="text-start">
+                  <strong>${topAssister.name}</strong><br>
+                  <small>${topAssister.team} • ${topAssister.assists || 0} assists</small>
+                </div>
+              `;
+            }
+          });
+        
+        fetch('/api/stats/most-cards')
+          .then(response => response.json())
+          .then(data => {
+            if (data.length > 0) {
+              const mostYellows = data.sort((a, b) => b.yellow_cards - a.yellow_cards)[0];
+              const mostReds = data.sort((a, b) => b.red_cards - a.red_cards)[0];
+              
+              document.getElementById('mostYellows').innerHTML = `
+                <img src="https://via.placeholder.com/40" alt="${mostYellows.name}" class="player-avatar">
+                <div class="text-start">
+                  <strong>${mostYellows.name}</strong><br>
+                  <small>${mostYellows.team} • ${mostYellows.yellow_cards || 0} yellows</small>
+                </div>
+              `;
+              
+              document.getElementById('mostReds').innerHTML = `
+                <img src="https://via.placeholder.com/40" alt="${mostReds.name}" class="player-avatar">
+                <div class="text-start">
+                  <strong>${mostReds.name}</strong><br>
+                  <small>${mostReds.team} • ${mostReds.red_cards || 0} reds</small>
+                </div>
+              `;
+            }
+          });
+      }
+      
+      // Load team standings
+      function loadTeamStandings() {
+        fetch('/api/stats/team-standings')
+          .then(response => response.json())
+          .then(teams => {
+            const tableBody = document.querySelector('#standingsTable tbody');
+            tableBody.innerHTML = '';
+            
+            teams.forEach((team, index) => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>
+                  <img src="https://via.placeholder.com/30" alt="${team.team}" class="team-logo">
+                  <strong>${team.team}</strong>
+                </td>
+                <td>${team.matches_played || 0}</td>
+                <td>${team.wins || 0}</td>
+                <td>${team.draws || 0}</td>
+                <td>${team.losses || 0}</td>
+                <td>${team.goals_for || 0}</td>
+                <td>${team.goals_against || 0}</td>
+                <td>${team.goal_difference || 0}</td>
+                <td><strong>${team.points || 0}</strong></td>
+              `;
+              tableBody.appendChild(row);
+            });
+          });
+      }
+      
+      // Load top scorers
+      function loadTopScorers() {
+        fetch('/api/stats/top-scorers')
+          .then(response => response.json())
+          .then(players => {
+            const container = document.getElementById('topScorersList');
+            container.innerHTML = '';
+            
+            if (players.length === 0) {
+              container.innerHTML = '<p class="text-muted">No data available</p>';
+              return;
+            }
+            
+            players.forEach((player, index) => {
+              const playerElement = document.createElement('div');
+              playerElement.className = 'd-flex justify-content-between align-items-center mb-3';
+              playerElement.innerHTML = `
+                <div class="d-flex align-items-center">
+                  <span class="badge bg-primary me-2">${index + 1}</span>
+                  <img src="https://via.placeholder.com/40" alt="${player.name}" class="player-avatar">
+                  <div>
+                    <h6 class="mb-0">${player.name}</h6>
+                    <small class="text-muted">${player.team}</small>
+                  </div>
+                </div>
+                <span class="badge bg-success badge-lg">${player.goals || 0} goals</span>
+              `;
+              container.appendChild(playerElement);
+            });
+          });
+      }
+      
+      // Load top assists
+      function loadTopAssists() {
+        fetch('/api/stats/top-assists')
+          .then(response => response.json())
+          .then(players => {
+            const container = document.getElementById('topAssistsList');
+            container.innerHTML = '';
+            
+            if (players.length === 0) {
+              container.innerHTML = '<p class="text-muted">No data available</p>';
+              return;
+            }
+            
+            players.forEach((player, index) => {
+              const playerElement = document.createElement('div');
+              playerElement.className = 'd-flex justify-content-between align-items-center mb-3';
+              playerElement.innerHTML = `
+                <div class="d-flex align-items-center">
+                  <span class="badge bg-primary me-2">${index + 1}</span>
+                  <img src="https://via.placeholder.com/40" alt="${player.name}" class="player-avatar">
+                  <div>
+                    <h6 class="mb-0">${player.name}</h6>
+                    <small class="text-muted">${player.team}</small>
+                  </div>
+                </div>
+                <span class="badge bg-info badge-lg">${player.assists || 0} assists</span>
+              `;
+              container.appendChild(playerElement);
+            });
+          });
+      }
+      
+      // Load most cards
+      function loadMostCards() {
+        fetch('/api/stats/most-cards')
+          .then(response => response.json())
+          .then(players => {
+            const yellowContainer = document.getElementById('mostYellowCardsList');
+            const redContainer = document.getElementById('mostRedCardsList');
+            
+            yellowContainer.innerHTML = '';
+            redContainer.innerHTML = '';
+            
+            if (players.length === 0) {
+              yellowContainer.innerHTML = '<p class="text-muted">No data available</p>';
+              redContainer.innerHTML = '<p class="text-muted">No data available</p>';
+              return;
+            }
+            
+            // Sort by yellow cards
+            const sortedByYellows = [...players].sort((a, b) => b.yellow_cards - a.yellow_cards);
+            sortedByYellows.forEach((player, index) => {
+              const playerElement = document.createElement('div');
+              playerElement.className = 'd-flex justify-content-between align-items-center mb-3';
+              playerElement.innerHTML = `
+                <div class="d-flex align-items-center">
+                  <span class="badge bg-primary me-2">${index + 1}</span>
+                  <img src="https://via.placeholder.com/40" alt="${player.name}" class="player-avatar">
+                  <div>
+                    <h6 class="mb-0">${player.name}</h6>
+                    <small class="text-muted">${player.team}</small>
+                  </div>
+                </div>
+                <span class="badge bg-warning badge-lg">${player.yellow_cards || 0} yellows</span>
+              `;
+              yellowContainer.appendChild(playerElement);
+            });
+            
+            // Sort by red cards
+            const sortedByReds = [...players].sort((a, b) => b.red_cards - a.red_cards);
+            sortedByReds.forEach((player, index) => {
+              const playerElement = document.createElement('div');
+              playerElement.className = 'd-flex justify-content-between align-items-center mb-3';
+              playerElement.innerHTML = `
+                <div class="d-flex align-items-center">
+                  <span class="badge bg-primary me-2">${index + 1}</span>
+                  <img src="https://via.placeholder.com/40" alt="${player.name}" class="player-avatar">
+                  <div>
+                    <h6 class="mb-0">${player.name}</h6>
+                    <small class="text-muted">${player.team}</small>
+                  </div>
+                </div>
+                <span class="badge bg-danger badge-lg">${player.red_cards || 0} reds</span>
+              `;
+              redContainer.appendChild(playerElement);
+            });
+          });
+      }
+      
+      // Load recent matches
+      function loadRecentMatches() {
+        fetch('/api/stats/recent-matches')
+          .then(response => response.json())
+          .then(matches => {
+            const container = document.getElementById('recentMatchesList');
+            container.innerHTML = '';
+            
+            if (matches.length === 0) {
+              container.innerHTML = '<p class="text-muted">No recent matches</p>';
+              return;
+            }
+            
+            matches.forEach(match => {
+              const matchElement = document.createElement('div');
+              matchElement.className = 'mb-3 p-3 border rounded';
+              
+              let resultBadge = '';
+              if (match.status === 'completed') {
+                resultBadge = `
+                  <span class="badge bg-primary">
+                    ${match.home_score} - ${match.away_score}
+                  </span>
+                `;
+              } else if (match.status === 'ongoing') {
+                resultBadge = '<span class="badge bg-warning">LIVE</span>';
+              } else {
+                resultBadge = '<span class="badge bg-secondary">Scheduled</span>';
+              }
+              
+              matchElement.innerHTML = `
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <small class="text-muted">
+                    ${new Date(match.match_date).toLocaleDateString()}
+                  </small>
+                  ${resultBadge}
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="text-end" style="flex: 1;">
+                    <h5 class="mb-0">${match.home_team}</h5>
+                  </div>
+                  <div class="px-3 text-center">
+                    <small>vs</small>
+                  </div>
+                  <div class="text-start" style="flex: 1;">
+                    <h5 class="mb-0">${match.away_team}</h5>
+                  </div>
+                </div>
+              `;
+              container.appendChild(matchElement);
+            });
+          });
+      }
+    });
+  </script>
+</body>
+</html>

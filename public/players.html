@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manejo de jugadores | Liga</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .player-card {
+      transition: transform 0.2s;
+    }
+    .player-card:hover {
+      transform: translateY(-5px);
+    }
+    .player-img {
+      height: 150px;
+      object-fit: cover;
+      object-position: top;
+    }
+    .stats-badge {
+      font-size: 0.9rem;
+      margin-right: 5px;
+    }
+    .search-container {
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    .position-badge {
+      font-size: 0.8rem;
+      padding: 5px 10px;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <i class="fas fa-trophy me-2"></i>Liga deportiva
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="matches.html">Partidos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="stats.html">Estadisticas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="teams.html">Equipos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="teams.html">Jugadores</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <h1 class="mb-4">Gestion de jugadores</h1>
+    
+    <!-- Search and Add Player -->
+    <div class="search-container mb-4">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="input-group">
+            <input type="text" class="form-control" id="searchInput" placeholder="Search players by name or team...">
+            <button class="btn btn-primary" id="searchBtn">
+              <i class="fas fa-search"></i> Buscar
+            </button>
+          </div>
+        </div>
+        <div class="col-md-4 text-md-end">
+          <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#playerModal">
+            <i class="fas fa-plus"></i> Agregar jugador
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Players List -->
+    <div class="row" id="playersList">
+      <!-- Players will be loaded here -->
+      <div class="col-12 text-center">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Player Details Modal -->
+    <div class="modal fade" id="playerDetailsModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="playerDetailsTitle">Detalles del jugador</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-4 text-center">
+                <img src="https://via.placeholder.com/300" alt="Player Image" class="img-fluid rounded-circle mb-3 player-img" id="playerDetailsImage">
+                <h4 id="playerDetailsName"></h4>
+                <div class="d-flex justify-content-center gap-2 mb-3">
+                  <span class="badge bg-primary position-badge" id="playerDetailsPosition"></span>
+                  <span class="badge bg-secondary position-badge" id="playerDetailsJersey"></span>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="row mb-3">
+                  <div class="col-6">
+                    <p><strong>Team:</strong> <span id="playerDetailsTeam"></span></p>
+                  </div>
+                  <div class="col-6">
+                    <p><strong>Age:</strong> <span id="playerDetailsAge"></span></p>
+                  </div>
+                </div>
+                <hr>
+                <h5 class="mb-3">Statistics</h5>
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                  <span class="badge bg-success stats-badge">
+                    <i class="fas fa-futbol me-1"></i> <span id="playerGoals">0</span> Goles
+                  </span>
+                  <span class="badge bg-info stats-badge">
+                    <i class="fas fa-assist me-1"></i> <span id="playerAssists">0</span> Asistencias
+                  </span>
+                  <span class="badge bg-warning stats-badge">
+                    <i class="fas fa-card me-1"></i> <span id="playerYellows">0</span> Amarillas
+                  </span>
+                  <span class="badge bg-danger stats-badge">
+                    <i class="fas fa-card me-1"></i> <span id="playerReds">0</span> Rojas
+                  </span>
+                </div>
+                <hr>
+                <h5 class="mb-3">Eventos recientes</h5>
+                <ul class="list-group" id="playerEventsList">
+                  <li class="list-group-item">Sin eventos recientes</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Add/Edit Player Modal -->
+    <div class="modal fade" id="playerModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalTitle">Agregar nuevo jugador</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="playerForm">
+            <div class="modal-body">
+              <input type="hidden" id="playerId">
+              <div class="mb-3">
+                <label for="name" class="form-label">Nombre completo</label>
+                <input type="text" class="form-control" id="name" required>
+              </div>
+              <div class="mb-3">
+                <label for="team" class="form-label">Equipo</label>
+                <input type="text" class="form-control" id="team" required>
+              </div>
+              <div class="mb-3">
+                <label for="position" class="form-label">Posicion</label>
+                <select class="form-select" id="position" required>
+                  <option value="">Selecciona la posicion</option>
+                  <option value="Goalkeeper">Portero</option>
+                  <option value="Defender">Defensa</option>
+                  <option value="Midfielder">Medio-campo</option>
+                  <option value="Forward">Delantero</option>
+                </select>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label for="jerseyNumber" class="form-label">Numero de camiseta</label>
+                  <input type="number" class="form-control" id="jerseyNumber" min="1" max="99" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <label for="age" class="form-label">Edad</label>
+                  <input type="number" class="form-control" id="age" min="16" max="50" required>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary" id="saveBtn">Guardar jugador</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-dark text-white py-4 mt-5">
+    <div class="container text-center">
+      <p>&copy; 2023 Sports League Manager. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const playersList = document.getElementById('playersList');
+      const searchInput = document.getElementById('searchInput');
+      const searchBtn = document.getElementById('searchBtn');
+      const playerForm = document.getElementById('playerForm');
+      const playerModal = new bootstrap.Modal(document.getElementById('playerModal'));
+      const playerDetailsModal = new bootstrap.Modal(document.getElementById('playerDetailsModal'));
+      
+      let isEditing = false;
+      let currentPlayerId = null;
+      
+      // Load all players on page load
+      fetchPlayers();
+      
+      // Search functionality
+      searchBtn.addEventListener('click', function() {
+        const searchTerm = searchInput.value.trim();
+        if (searchTerm) {
+          searchPlayers(searchTerm);
+        } else {
+          fetchPlayers();
+        }
+      });
+      
+      // Form submission
+      playerForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const playerData = {
+          name: document.getElementById('name').value,
+          team: document.getElementById('team').value,
+          position: document.getElementById('position').value,
+          jersey_number: document.getElementById('jerseyNumber').value,
+          age: document.getElementById('age').value
+        };
+        
+        if (isEditing) {
+          updatePlayer(currentPlayerId, playerData);
+        } else {
+          createPlayer(playerData);
+        }
+      });
+      
+      // Fetch all players
+      function fetchPlayers() {
+        fetch('/api/players')
+          .then(response => response.json())
+          .then(players => {
+            displayPlayers(players);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            playersList.innerHTML = `
+              <div class="col-12">
+                <div class="alert alert-danger">Failed to load players. Please try again later.</div>
+              </div>
+            `;
+          });
+      }
+      
+      // Search players
+      function searchPlayers(term) {
+        fetch(`/api/players/search?term=${encodeURIComponent(term)}`)
+          .then(response => response.json())
+          .then(players => {
+            displayPlayers(players);
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+      
+      // Display players
+      function displayPlayers(players) {
+        if (players.length === 0) {
+          playersList.innerHTML = `
+            <div class="col-12">
+              <div class="alert alert-info">No players found.</div>
+            </div>
+          `;
+          return;
+        }
+        
+        playersList.innerHTML = '';
+        
+        players.forEach(player => {
+          const playerCard = document.createElement('div');
+          playerCard.className = 'col-md-4 mb-4';
+          playerCard.innerHTML = `
+            <div class="card player-card h-100">
+              <div class="card-body">
+                <div class="d-flex align-items-start">
+                  <img src="https://via.placeholder.com/100" alt="${player.name}" class="rounded-circle me-3" width="60" height="60">
+                  <div>
+                    <h5 class="card-title mb-1">${player.name}</h5>
+                    <p class="card-text mb-1"><small class="text-muted">${player.team}</small></p>
+                    <span class="badge bg-primary">${player.position}</span>
+                    <span class="badge bg-secondary">#${player.jersey_number}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-transparent d-flex justify-content-between">
+                <button class="btn btn-sm btn-outline-primary view-btn" data-id="${player.id}">
+                  <i class="fas fa-eye"></i> View
+                </button>
+                <div>
+                  <button class="btn btn-sm btn-outline-secondary edit-btn" data-id="${player.id}">
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${player.id}">
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+          playersList.appendChild(playerCard);
+        });
+        
+        // Add event listeners to buttons
+        document.querySelectorAll('.view-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const playerId = this.getAttribute('data-id');
+            viewPlayerDetails(playerId);
+          });
+        });
+        
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const playerId = this.getAttribute('data-id');
+            editPlayer(playerId);
+          });
+        });
+        
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', function() {
+            const playerId = this.getAttribute('data-id');
+            if (confirm('Are you sure you want to delete this player?')) {
+              deletePlayer(playerId);
+            }
+          });
+        });
+      }
+      
+      // View player details
+      function viewPlayerDetails(playerId) {
+        fetch(`/api/players/${playerId}`)
+          .then(response => response.json())
+          .then(player => {
+            document.getElementById('playerDetailsTitle').textContent = player.name;
+            document.getElementById('playerDetailsName').textContent = player.name;
+            document.getElementById('playerDetailsTeam').textContent = player.team;
+            document.getElementById('playerDetailsPosition').textContent = player.position;
+            document.getElementById('playerDetailsJersey').textContent = `#${player.jersey_number}`;
+            document.getElementById('playerDetailsAge').textContent = player.age;
+            
+            // Stats
+            document.getElementById('playerGoals').textContent = player.stats.goals;
+            document.getElementById('playerAssists').textContent = player.stats.assists;
+            document.getElementById('playerYellows').textContent = player.stats.yellow_cards;
+            document.getElementById('playerReds').textContent = player.stats.red_cards;
+            
+            // TODO: Load player events from another API endpoint if needed
+            
+            playerDetailsModal.show();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+      
+      // Create player
+      function createPlayer(playerData) {
+        fetch('/api/players', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(playerData)
+        })
+          .then(response => response.json())
+          .then(player => {
+            fetchPlayers();
+            playerModal.hide();
+            playerForm.reset();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+      
+      // Edit player
+      function editPlayer(playerId) {
+        fetch(`/api/players/${playerId}`)
+          .then(response => response.json())
+          .then(player => {
+            document.getElementById('modalTitle').textContent = 'Edit Player';
+            document.getElementById('playerId').value = player.id;
+            document.getElementById('name').value = player.name;
+            document.getElementById('team').value = player.team;
+            document.getElementById('position').value = player.position;
+            document.getElementById('jerseyNumber').value = player.jersey_number;
+            document.getElementById('age').value = player.age;
+            
+            isEditing = true;
+            currentPlayerId = playerId;
+            document.getElementById('saveBtn').textContent = 'Update Player';
+            
+            playerModal.show();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+      
+      // Update player
+      function updatePlayer(playerId, playerData) {
+        fetch(`/api/players/${playerId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(playerData)
+        })
+          .then(response => response.json())
+          .then(player => {
+            fetchPlayers();
+            playerModal.hide();
+            resetForm();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+      
+      // Delete player
+      function deletePlayer(playerId) {
+        fetch(`/api/players/${playerId}`, {
+          method: 'DELETE'
+        })
+          .then(() => {
+            fetchPlayers();
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      }
+      
+      // Reset form
+      function resetForm() {
+        playerForm.reset();
+        isEditing = false;
+        currentPlayerId = null;
+        document.getElementById('modalTitle').textContent = 'Add New Player';
+        document.getElementById('saveBtn').textContent = 'Save Player';
+      }
+      
+      // Reset form when modal is closed
+      document.getElementById('playerModal').addEventListener('hidden.bs.modal', function() {
+        resetForm();
+      });
+    });
+  </script>
+</body>
+</html>
