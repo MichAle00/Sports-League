@@ -29,6 +29,7 @@ export const initDatabase = async (req, res) => {
         home_score INT DEFAULT 0,
         away_score INT DEFAULT 0,
         stadium VARCHAR(30),
+        status ENUM('scheduled', 'ongoing', 'postponed', 'cancelled') NOT NULL,
         FOREIGN KEY (home_team_id) REFERENCES teams(team_id),
         FOREIGN KEY (away_team_id) REFERENCES teams(team_id),
         FOREIGN KEY (stadium_id) REFERENCES teams(stadium)
