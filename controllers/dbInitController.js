@@ -6,38 +6,69 @@ export const initDatabase = async (req, res) => {
     try {
         await connection.beginTransaction();
 
-        // Check and create sports table
         await connection.query(`
-      CREATE TABLE IF NOT EXISTS sports (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        name VARCHAR(100) NOT NULL,
-        image VARCHAR(255),
+      CREATE TABLE IF NOT EXISTS stadiums (
+        stadium_id INT AUTO_INCREMENT PRIMARY KEY,
+        team_id INT NOT NULL,
+        name VARCHAR(30) NOT NULL,
+        construction_year YEAR,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        FOREIGN KEY (team_id) REFERENCES teams(team_id)
+      )
+    `);
+        // Check and create events table
+        await connection.query(`
+      CREATE TABLE IF NOT EXISTS events (
+        event_id INT AUTO_INCREMENT PRIMARY KEY,
+        match_id INT NOT NULL,
+        player_id INT,
+        event_type ENUM('goal', 'yellow', 'red', 'assist') NOT NULL,
+        minute INT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        FOREIGN KEY (match_id) REFERENCES matches(match_id),
+        FOREIGN KEY (player_id) REFERENCES players(player_id)
+      )
+    `);
+
+        await connection.query(`
+      CREATE TABLE IF NOT EXISTS matches (
+        match_id INT AUTO_INCREMENT PRIMARY KEY,
+        date DATE NOT NULL,
+        home_team_id INT NOT NULL,
+        away_team_id INT NOT NULL,
+        home_score INT DEFAULT 0,
+        away_score INT DEFAULT 0,
+        stadium_id INT NOT NULL,
+        FOREIGN KEY (home_team_id) REFERENCES teams(team_id),
+        FOREIGN KEY (away_team_id) REFERENCES teams(team_id),
+        FOREIGN KEY (stadium_id) REFERENCES stadiums(stadium_id)
       )
     `);
 
         // Check and create teams table
         await connection.query(`
       CREATE TABLE IF NOT EXISTS teams (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        sport_id INT NOT NULL,
+        team_id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(100) NOT NULL,
+        city VARCHAR(30) NOT NULL,
+        founded_year YEAR NOT NULL,
+        stadium VARCHAR(30),
+        coach VARCHAR(30) NOT NULL,
         logo VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (sport_id) REFERENCES sports(id) ON DELETE CASCADE
       )
     `);
 
         // Check and create players table
         await connection.query(`
       CREATE TABLE IF NOT EXISTS players (
-        id INT AUTO_INCREMENT PRIMARY KEY,
+        player_id INT AUTO_INCREMENT PRIMARY KEY,
         team_id INT NOT NULL,
-        name VARCHAR(100) NOT NULL,
-        position VARCHAR(50),
+        full_name VARCHAR(100) NOT NULL,
+        position ENUM('goalkeeper', 'midfielder', 'defense', 'striker') NOT NULL,
         jersey_number INT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (team_id) REFERENCES teams(id) ON DELETE CASCADE
+        FOREIGN KEY (team_id) REFERENCES teams(team_id)
       )
     `);
 
