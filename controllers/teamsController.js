@@ -38,7 +38,7 @@ export const spec_team = async (req, res) => {
         SUM(CASE WHEN home_team_id = ? THEN home_score ELSE away_score END) as goals_for,
         SUM(CASE WHEN home_team_id = ? THEN away_score ELSE home_score END) as goals_against
       FROM matches
-      WHERE (home_team = ? OR away_team = ?) AND status = 'completed'
+      WHERE (home_team_id = ? OR away_team_id = ?) AND status = 'completed'
     `, Array(10).fill(team[0].teamId));
 
         res.json({

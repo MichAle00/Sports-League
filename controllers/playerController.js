@@ -20,7 +20,7 @@ export const search = async (req, res) => {
 
         const [rows] = await pool.query(
             'SELECT * FROM players WHERE full_name LIKE ? OR team_id LIKE ?',
-            [`%${searchTerm}%`, `%${searchTerm}%`]
+            [`%${searchTerm}%`, team_id]
         );
         res.json(rows);
     } catch (err) {
@@ -86,7 +86,7 @@ export const update_player = async (req, res) => {
         );
 
         await pool.query(
-            'UPDATE players SET full_name = ?, team_id = ?, position = ?, jersey_number = ?, age = ? WHERE id = ?',
+            'UPDATE players SET full_name = ?, team_id = ?, position = ?, jersey_number = ?, age = ? WHERE player_id = ?',
             [name, team_id, position, jersey_number, age, playerId]
         );
         const [updatedPlayer] = await pool.query('SELECT * FROM players WHERE player_id = ?', [playerId]);
@@ -100,7 +100,7 @@ export const update_player = async (req, res) => {
 export const del_player = async (req, res) => {
     const playerId = req.params.id;
     try {
-        await pool.query('DELETE FROM players WHERE id = ?', [playerId]);
+        await pool.query('DELETE FROM players WHERE player_id = ?', [playerId]);
         res.status(204).send();
     } catch (err) {
         console.error(err);

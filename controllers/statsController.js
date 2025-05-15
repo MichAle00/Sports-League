@@ -4,7 +4,7 @@ import pool from '../config/db.js';
 export const top_scorers = async (req, res) => {
     try {
         const [rows] = await pool.query(`
-      SELECT p.player_id, p.full_name, p.team_id, COUNT(e.id) as goals
+      SELECT p.player_id, p.full_name, p.team_id, COUNT(e.event_type WHERE event_type = goal) as goals
       FROM players p
       LEFT JOIN events e ON p.player_id = e.player_id
       GROUP BY p.player_id
@@ -22,9 +22,9 @@ export const top_scorers = async (req, res) => {
 export const top_assists = async (req, res) => {
     try {
         const [rows] = await pool.query(`
-      SELECT p.id, p.name, p.team, COUNT(a.id) as assists
+      SELECT p.player_id, p.full_name, p.team_id, COUNT(e.id) as assists
       FROM players p
-      LEFT JOIN assists a ON p.id = a.player_id
+      LEFT JOIN event e ON p.id = a.player_id
       GROUP BY p.id
       ORDER BY assists DESC
       LIMIT 10
@@ -40,12 +40,12 @@ export const top_assists = async (req, res) => {
 export const most_cards = async (req, res) => {
     try {
         const [rows] = await pool.query(`
-      SELECT p.id, p.name, p.team, 
-             SUM(CASE WHEN c.card_type = 'yellow' THEN 1 ELSE 0 END) as yellow_cards,
-             SUM(CASE WHEN c.card_type = 'red' THEN 1 ELSE 0 END) as red_cards,
-             COUNT(c.id) as total_cards
+      SELECT p.player_id, p.full_name, p.team_id, 
+             SUM(CASE WHEN event_type = 'yellow' THEN 1 ELSE 0 END) as yellow_cards,
+             SUM(CASE WHEN event_type = 'red' THEN 1 ELSE 0 END) as red_cards,
+             COUNT(e.event_id) as total_cards
       FROM players p
-      LEFT JOIN cards c ON p.id = c.player_id
+      LEFT JOIN events e ON p.player_id = e.player_id
       GROUP BY p.id
       ORDER BY total_cards DESC
       LIMIT 10
@@ -94,9 +94,9 @@ export const team_standings = async (req, res) => {
 export const recent_matches = async (req, res) => {
     try {
         const [rows] = await pool.query(`
-      SELECT match_id, home_team_id, away_team_id, home_score, away_score, match_date, status
+      SELECT match_id, home_team_id, away_team_id, home_score, away_score, date, status
       FROM matches
-      ORDER BY match_date DESC
+      ORDER BY date DESC
       LIMIT 5
     `);
         res.json(rows);
