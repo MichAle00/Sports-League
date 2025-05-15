@@ -4,10 +4,10 @@ import pool from '../config/db.js';
 export const top_scorers = async (req, res) => {
     try {
         const [rows] = await pool.query(`
-      SELECT p.id, p.name, p.team, COUNT(g.id) as goals
+      SELECT p.player_id, p.full_name, p.team_id, COUNT(e.id) as goals
       FROM players p
-      LEFT JOIN goals g ON p.id = g.player_id
-      GROUP BY p.id
+      LEFT JOIN events e ON p.player_id = e.player_id
+      GROUP BY p.player_id
       ORDER BY goals DESC
       LIMIT 10
     `);
@@ -76,9 +76,9 @@ export const team_standings = async (req, res) => {
               ELSE 0 
             END) as points
       FROM (
-        SELECT home_team as team, home_score, away_score FROM matches
+        SELECT home_team_id as team, home_score, away_score FROM matches
         UNION ALL
-        SELECT away_team as team, away_score, home_score FROM matches
+        SELECT away_team_id as team, away_score, home_score FROM matches
       ) as combined
       GROUP BY team
       ORDER BY points DESC, goal_difference DESC
@@ -94,7 +94,7 @@ export const team_standings = async (req, res) => {
 export const recent_matches = async (req, res) => {
     try {
         const [rows] = await pool.query(`
-      SELECT id, home_team, away_team, home_score, away_score, match_date, status
+      SELECT match_id, home_team_id, away_team_id, home_score, away_score, match_date, status
       FROM matches
       ORDER BY match_date DESC
       LIMIT 5

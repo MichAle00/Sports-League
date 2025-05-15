@@ -69,9 +69,10 @@ export const initDatabase = async (req, res) => {
         await connection.query(`
       CREATE TABLE IF NOT EXISTS players (
         player_id INT AUTO_INCREMENT PRIMARY KEY,
+        age INT NOT NULL,
         team_id INT NOT NULL,
         full_name VARCHAR(100) NOT NULL,
-        position ENUM('goalkeeper', 'midfielder', 'defense', 'striker') NOT NULL,
+        position ENUM('Goalkeeper', 'Midfielder', 'Defense', 'Forward') NOT NULL,
         jersey_number INT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (team_id) REFERENCES teams(team_id)

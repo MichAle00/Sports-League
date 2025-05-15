@@ -209,9 +209,9 @@ document.addEventListener('DOMContentLoaded', function() {
         teamPerformanceChart = new Chart(ctx, {
           type: 'bar',
           data: {
-            labels: ['Wins', 'Draws', 'Losses'],
+            labels: ['Victorias', 'Empates', 'Derrotas'],
             datasets: [{
-              label: 'Match Results',
+              label: 'Resultados de partidos',
               data: [stats.wins || 0, stats.draws || 0, stats.losses || 0],
               backgroundColor: [
                 'rgba(40, 167, 69, 0.7)',

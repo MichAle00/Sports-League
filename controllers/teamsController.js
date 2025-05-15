@@ -14,32 +14,32 @@ export const get_team = async (req, res) => {
 export const spec_team = async (req, res) => {
     const teamId = req.params.id;
     try {
-        const [team] = await pool.query('SELECT * FROM teams WHERE id = ?', [teamId]);
+        const [team] = await pool.query('SELECT * FROM teams WHERE team_id = ?', [teamId]);
 
         if (team.length === 0) {
             return res.status(404).send('Team not found');
         }
 
         // Get team players
-        const [players] = await pool.query('SELECT * FROM players WHERE teams = ?', [team[0].name]);
+        const [players] = await pool.query('SELECT * FROM players WHERE team_id = ?', [team[0].teamId]);
 
         // Get team stats
         const [stats] = await pool.query(`
       SELECT 
         COUNT(*) as matches_played,
-        SUM(CASE WHEN home_team = ? AND home_score > away_score THEN 1
-                 WHEN away_team = ? AND away_score > home_score THEN 1
+        SUM(CASE WHEN home_team_id = ? AND home_score > away_score THEN 1
+                 WHEN away_team_id = ? AND away_score > home_score THEN 1
                  ELSE 0 END) as wins,
-        SUM(CASE WHEN (home_team = ? OR away_team = ?) AND home_score = away_score THEN 1
+        SUM(CASE WHEN (home_team_id = ? OR away_team = ?) AND home_score = away_score THEN 1
                  ELSE 0 END) as draws,
-        SUM(CASE WHEN home_team = ? AND home_score < away_score THEN 1
-                 WHEN away_team = ? AND away_score < home_score THEN 1
+        SUM(CASE WHEN home_team_id = ? AND home_score < away_score THEN 1
+                 WHEN away_team_id = ? AND away_score < home_score THEN 1
                  ELSE 0 END) as losses,
-        SUM(CASE WHEN home_team = ? THEN home_score ELSE away_score END) as goals_for,
-        SUM(CASE WHEN home_team = ? THEN away_score ELSE home_score END) as goals_against
+        SUM(CASE WHEN home_team_id = ? THEN home_score ELSE away_score END) as goals_for,
+        SUM(CASE WHEN home_team_id = ? THEN away_score ELSE home_score END) as goals_against
       FROM matches
       WHERE (home_team = ? OR away_team = ?) AND status = 'completed'
-    `, Array(10).fill(team[0].name));
+    `, Array(10).fill(team[0].teamId));
 
         res.json({
             ...team[0],
