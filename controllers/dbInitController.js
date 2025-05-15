@@ -60,7 +60,7 @@ export const initDatabase = async (req, res) => {
         founded_year YEAR NOT NULL,
         stadium VARCHAR(30),
         coach VARCHAR(30) NOT NULL,
-        logo VARCHAR(255),
+        logo_url VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
