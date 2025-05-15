@@ -6,6 +6,21 @@ export const initDatabase = async (req, res) => {
     try {
         await connection.beginTransaction();
 
+        await connection.query(`
+      CREATE TABLE IF NOT EXISTS stats (
+        stat_id INT AUTO_INCREMENT PRIMARY KEY,
+        team_id INT,
+        wins INT,
+        losses INT,
+        draws INT,
+        played_matches INT,
+        goals_for INT,
+        goals_against INT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (team_id) REFERENCES teams(team_id)
+      )
+    `);
+
         // Check and create events table
         await connection.query(`
       CREATE TABLE IF NOT EXISTS events (
@@ -14,7 +29,7 @@ export const initDatabase = async (req, res) => {
         player_id INT,
         event_type ENUM('goal', 'yellow', 'red', 'assist') NOT NULL,
         minute INT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (match_id) REFERENCES matches(match_id),
         FOREIGN KEY (player_id) REFERENCES players(player_id)
       )
@@ -46,7 +61,7 @@ export const initDatabase = async (req, res) => {
         stadium VARCHAR(30),
         coach VARCHAR(30) NOT NULL,
         logo VARCHAR(255),
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
