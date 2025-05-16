@@ -37,7 +37,7 @@ export const top_assists = async (req, res) => {
             COUNT(e.id) as assists
         FROM
             players p
-            LEFT JOIN event e ON p.id = a.player_id
+            LEFT JOIN event e ON p.player_id = a.player_id
         GROUP BY
             p.id
         ORDER BY

@@ -9,10 +9,10 @@ import {
 
 const router = Router();
  
-router.get('/top-scorers/:sportId', top_scorers);
-router.get('/top-assists/:sportId', top_assists);
-router.get('/most-cards/:sportId', most_cards);
-router.get('/team-standings/:sportId', team_standings);
-router.get('/recent-matches/:sportId', recent_matches);
+router.get('/top-scorers', top_scorers);
+router.get('/top-assists', top_assists);
+router.get('/most-cards', most_cards);
+router.get('/team-standings', team_standings);
+router.get('/recent-matches', recent_matches);
  
 export default router;
