@@ -3,7 +3,18 @@ import pool from '../config/db.js';
 // Players API routes
 export const get_players = async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT * FROM players');
+        const [rows] = await pool.query(`
+        SELECT
+            players.player_id,
+            players.full_name,
+            players.age,
+            teams.name,
+            players.position,
+            players.jersey_number
+        FROM
+            players
+        INNER JOIN players ON players.team_id = teams.team_id    
+        `);
         res.json(rows);
     } catch (err) {
         console.error(err);
@@ -18,8 +29,20 @@ export const search = async (req, res) => {
             'SELECT team_id FROM teams WHERE name = ?', [, `%${searchTerm}%`]
         );
 
-        const [rows] = await pool.query(
-            'SELECT * FROM players WHERE full_name LIKE ? OR team_id LIKE ?',
+        const [rows] = await pool.query(`
+            SELECT
+                players.player_id,
+                players.full_name,
+                players.age,
+                teams.name,
+                players.position,
+                players.jersey_number
+            FROM
+                players
+            INNER JOIN players ON players.team_id = teams.team_id
+            WHERE
+                players.full_name LIKE ?
+                OR team_id LIKE ?`,
             [`%${searchTerm}%`, team_id]
         );
         res.json(rows);
@@ -33,7 +56,18 @@ export const search_stats = async (req, res) => {
     const playerId = req.params.id;
     try {
         // Get player info
-        const [player] = await pool.query('SELECT * FROM players WHERE player_id = ?', [playerId]);
+        const [player] = await pool.query(`
+        SELECT
+            players.player_id,
+            players.full_name,
+            players.age,
+            teams.name,
+            players.position,
+            players.jersey_number
+        FROM
+            players
+        INNER JOIN players ON players.team_id = teams.team_id
+        WHERE players.player_id = ?`, [playerId]);
 
         if (player.length === 0) {
             return res.status(404).send('Player not found');
@@ -41,11 +75,43 @@ export const search_stats = async (req, res) => {
 
         // Get player stats (goals, cards, etc.)
         const [stats] = await pool.query(`
-      SELECT 
-        (SELECT COUNT(*) FROM events WHERE player_id = ? AND event_type = goal) as goals,
-        (SELECT COUNT(*) FROM events WHERE player_id = ? AND event_type = assist) as assists,
-        (SELECT COUNT(*) FROM events WHERE player_id = ? AND event_type = yellow) as yellow_cards,
-        (SELECT COUNT(*) FROM events WHERE player_id = ? AND event_type = red) as red_cards
+        SELECT
+        (
+            SELECT
+            COUNT(*)
+            FROM
+            events
+            WHERE
+            player_id = ?
+            AND event_type = 'goal'
+        ) as goals,
+        (
+            SELECT
+            COUNT(*)
+            FROM
+            events
+            WHERE
+            player_id = ?
+            AND event_type = 'assist'
+        ) as assists,
+        (
+            SELECT
+            COUNT(*)
+            FROM
+            events
+            WHERE
+            player_id = ?
+            AND event_type = 'yellow'
+        ) as yellow_cards,
+        (
+            SELECT
+            COUNT(*)
+            FROM
+            events
+            WHERE
+            player_id = ?
+            AND event_type = 'red'
+        ) as red_cards
     `, [playerId, playerId, playerId, playerId]);
 
         res.json({
@@ -66,7 +132,10 @@ export const add_player = async (req, res) => {
         );
 
         const [result] = await pool.query(
-            'INSERT INTO players (full_name, team_id, position, jersey_number, age) VALUES (?, ?, ?, ?, ?)',
+            `INSERT INTO 
+                players (full_name, team_id, position, jersey_number, age) 
+            VALUES 
+                (?, ?, ?, ?, ?)`,
             [name, team_id, position, jersey_number, age]
         );
         const [newPlayer] = await pool.query('SELECT * FROM players WHERE player_id = ?', [result.insertId]);
@@ -86,7 +155,11 @@ export const update_player = async (req, res) => {
         );
 
         await pool.query(
-            'UPDATE players SET full_name = ?, team_id = ?, position = ?, jersey_number = ?, age = ? WHERE player_id = ?',
+            `UPDATE 
+                players 
+            SET 
+                full_name = ?, team_id = ?, position = ?, jersey_number = ?, age = ? 
+            WHERE player_id = ?`,
             [name, team_id, position, jersey_number, age, playerId]
         );
         const [updatedPlayer] = await pool.query('SELECT * FROM players WHERE player_id = ?', [playerId]);

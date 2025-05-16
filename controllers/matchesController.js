@@ -2,7 +2,14 @@ import pool from '../config/db.js';
 
 export const getAllMatches = async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT * FROM matches ORDER BY date DESC');
+        const [rows] = await pool.query(`
+            SELECT 
+                * 
+            FROM
+                matches 
+            ORDER BY   
+                date DESC
+            `);
         res.json(rows);
     } catch (err) {
         console.error(err);
@@ -12,7 +19,13 @@ export const getAllMatches = async (req, res) => {
 
 export const getMatchById = async (req, res) => {
     try {
-        const [rows] = await pool.query('SELECT * FROM matches WHERE match_id = ?', [req.params.id]);
+        const [rows] = await pool.query(`
+            SELECT 
+                * 
+            FROM 
+                matches 
+            WHERE 
+                match_id = ?`, [req.params.id]);
         if (rows.length === 0) {
             return res.status(404).send('Match not found');
         }
@@ -27,16 +40,29 @@ export const createMatch = async (req, res) => {
     const { home_team, away_team, match_date, location, home_score, away_score, status } = req.body;
 
     try {
-        const [home_team_id] = await pool.query(
-            'SELECT team_id FROM teams WHERE name = ?', [home_team]
+        const [home_team_id] = await pool.query(`
+            SELECT 
+                team_id 
+            FROM 
+                teams 
+            WHERE 
+                name = ?`, [home_team]
         );
 
-        const [away_team_id] = await pool.query(
-            'SELECT team_id FROM teams WHERE name = ?', [away_team]
+        const [away_team_id] = await pool.query(`
+            SELECT 
+                team_id 
+            FROM 
+                teams 
+            WHERE 
+                name = ?`, [away_team]
         );
 
         const [result] = await pool.query(
-            'INSERT INTO matches (home_team_id, away_team_id, date, stadium, home_score, away_score, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            `INSERT INTO 
+                matches (home_team_id, away_team_id, date, stadium, home_score, away_score, status) 
+            VALUES 
+                (?, ?, ?, ?, ?, ?, ?)`,
             [home_team_id, away_team_id, match_date, location, home_score || 0, away_score || 0, status || 'scheduled']
         );
 
@@ -61,8 +87,13 @@ export const updateMatch = async (req, res) => {
             'SELECT team_id FROM teams WHERE name = ?', [away_team]
         );
 
-        await pool.query(
-            'UPDATE matches SET home_team_id = ?, away_team_id = ?, date = ?, stadium = ?, home_score = ?, away_score = ?, status = ? WHERE match_id = ?',
+        await pool.query(`
+            UPDATE 
+                matches 
+            SET 
+                home_team_id = ?, away_team_id = ?, date = ?, stadium = ?, home_score = ?, away_score = ?, status = ? 
+            WHERE 
+                match_id = ?`,
             [home_team_id, away_team_id, match_date, location, home_score, away_score, status, matchId]
         );
 
@@ -96,11 +127,19 @@ export const searchMatches = async (req, res) => {
             'SELECT team_id FROM teams WHERE name = ?', [, `%${searchTerm}%`, ]
         );
 
-        const [rows] = await pool.query(
-            `SELECT * FROM matches 
-       WHERE home_team_id LIKE ? OR away_team_id LIKE ? OR stadium LIKE ?
-       ORDER BY match_date DESC`,
-            [home_team_id, away_team_id, `%${searchTerm}%`]
+        const [rows] = await pool.query(`
+        SELECT * 
+        FROM 
+            matches 
+        WHERE 
+            home_team_id LIKE ? 
+        OR 
+            away_team_id LIKE ? 
+        OR 
+            stadium LIKE ?
+        ORDER BY 
+            match_date DESC`,
+        [home_team_id, away_team_id, `%${searchTerm}%`]
         );
         res.json(rows);
     } catch (err) {
