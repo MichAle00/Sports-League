@@ -128,18 +128,18 @@ export const team_standings = async (req, res) => {
         FROM
             (
                 SELECT
-                home_team_id as team,
-                home_score,
-                away_score
+                    home_team_id as team,
+                    home_score,
+                    away_score
                 FROM
-                matches
+                    matches
                 UNION ALL
                 SELECT
-                away_team_id as team,
-                away_score,
-                home_score
+                    away_team_id as team,
+                    away_score,
+                    home_score
                 FROM
-                matches
+                    matches
             ) as combined
         GROUP BY
             team
