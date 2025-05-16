@@ -25,14 +25,14 @@ export const get_players = async (req, res) => {
 export const search = async (req, res) => {
     const searchTerm = req.query.term;
     try {
-        const [team_id] = await pool.query(`
+        /*const [team_id] = await pool.query(`
             SELECT 
                 team_id 
             FROM 
                 teams 
             WHERE 
-                name = ?`, [, `%${searchTerm}%`]
-        );
+                name = ?`, [`%${searchTerm}%`]
+        );*/
 
         const [rows] = await pool.query(`
             SELECT
@@ -46,9 +46,8 @@ export const search = async (req, res) => {
                 players
             INNER JOIN players ON players.team_id = teams.team_id
             WHERE
-                players.full_name LIKE ?
-                OR team_id LIKE ?`,
-            [`%${searchTerm}%`, team_id]
+                players.full_name LIKE ?`,
+            [`%${searchTerm}%`]
         );
         res.json(rows);
     } catch (err) {

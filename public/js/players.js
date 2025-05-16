@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	// View player details
 	function viewPlayerDetails(playerId) {
-	fetch(`/api/players/${playerId}`)
+	fetch(`/api/players/search/stats/${playerId}`)
 		.then(response => response.json())
 		.then(player => {
 		document.getElementById('playerDetailsTitle').textContent = player.name;
@@ -161,6 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.getElementById('playerReds').textContent = player.stats.red_cards;
 		
 		// TODO: Load player events from another API endpoint if needed
+
 		
 		playerDetailsModal.show();
 		})

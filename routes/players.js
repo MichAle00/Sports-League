@@ -12,7 +12,7 @@ const router = Router();
  
 router.get('/players', get_players);
 router.get('/players/search', search);
-router.get('/players/search/stats', search_stats);
+router.get('/players/search/stats/:id', search_stats);
 router.post('/players', add_player);
 router.put('/players/:id', update_player);
 router.delete('/players/:id', del_player);
