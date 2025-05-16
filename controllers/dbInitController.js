@@ -7,6 +7,10 @@ export const initDatabase = async (req, res) => {
         await connection.beginTransaction();
 
         await connection.query(`
+      CREATE DATABASE IF NOT EXISTS sports_db
+    `);
+
+        await connection.query(`
       CREATE TABLE IF NOT EXISTS stats (
         stat_id INT AUTO_INCREMENT PRIMARY KEY,
         team_id INT,
