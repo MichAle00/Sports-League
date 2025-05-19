@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	e.preventDefault();
 	
 	const playerData = {
-		name: document.getElementById('name').value,
+		full_name: document.getElementById('name').value,
 		team: document.getElementById('team').value,
 		position: document.getElementById('position').value,
 		jersey_number: document.getElementById('jerseyNumber').value,
@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		isEditing = true;
 		currentPlayerId = playerId;
-		document.getElementById('saveBtn').textContent = 'Update Player';
+		document.getElementById('saveBtn').textContent = 'Actualizar Jugador';
 		
 		playerModal.show();
 		})
@@ -252,8 +252,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	playerForm.reset();
 	isEditing = false;
 	currentPlayerId = null;
-	document.getElementById('modalTitle').textContent = 'Add New Player';
-	document.getElementById('saveBtn').textContent = 'Save Player';
+	document.getElementById('modalTitle').textContent = 'Agregar Jugador';
+	document.getElementById('saveBtn').textContent = 'Guardar Jugador';
 	}
 
 	// Reset form when modal is closed

@@ -1,4 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
+	const dbBtn = document.getElementById('database');
+    if (dbBtn) {
+        dbBtn.addEventListener('click', function() {
+            dbBtn.disabled = true;
+            dbBtn.textContent = 'Inicializando...';
+            fetch('/api/init-db', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message);
+                    dbBtn.textContent = 'TEST DB';
+                    dbBtn.disabled = false;
+                })
+                .catch(err => {
+                    alert('DB Init failed: ' + err.message);
+                    dbBtn.textContent = 'TEST DB';
+                    dbBtn.disabled = false;
+                });
+        });
+    }
+	
 	// Load upcoming matches
 	fetch('/api/matches')
 	.then(response => response.json())

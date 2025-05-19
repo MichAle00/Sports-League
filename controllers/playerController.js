@@ -4,16 +4,16 @@ import pool from '../config/db.js';
 export const get_players = async (req, res) => {
     try {
         const [rows] = await pool.query(`
-        SELECT
-            players.player_id,
-            players.full_name,
-            players.age,
-            teams.name,
-            players.position,
-            players.jersey_number
-        FROM
-            players
-        INNER JOIN players ON players.team_id = teams.team_id    
+            SELECT
+                players.player_id AS id,
+                players.full_name AS name,
+                players.age,
+                teams.name AS team,
+                players.position,
+                players.jersey_number
+            FROM
+                players
+            INNER JOIN teams ON players.team_id = teams.team_id
         `);
         res.json(rows);
     } catch (err) {
@@ -25,14 +25,14 @@ export const get_players = async (req, res) => {
 export const search = async (req, res) => {
     const searchTerm = req.query.term;
     try {
-        /*const [team_id] = await pool.query(`
+        const [team_id] = await pool.query(`
             SELECT 
                 team_id 
             FROM 
                 teams 
             WHERE 
                 name = ?`, [`%${searchTerm}%`]
-        );*/
+        );
 
         const [rows] = await pool.query(`
             SELECT
@@ -44,7 +44,7 @@ export const search = async (req, res) => {
                 players.jersey_number
             FROM
                 players
-            INNER JOIN players ON players.team_id = teams.team_id
+            INNER JOIN teams ON players.team_id = teams.team_id
             WHERE
                 players.full_name LIKE ?`,
             [`%${searchTerm}%`]
@@ -70,7 +70,7 @@ export const search_stats = async (req, res) => {
             players.jersey_number
         FROM
             players
-        INNER JOIN players ON players.team_id = teams.team_id
+        INNER JOIN teams ON players.team_id = teams.team_id
         WHERE 
             players.player_id = ?`, [playerId]);
 
@@ -130,31 +130,43 @@ export const search_stats = async (req, res) => {
 };
 
 export const add_player = async (req, res) => {
-    const { name, team, position, jersey_number, age } = req.body;
+    const { full_name, team, position, jersey_number, age } = req.body;
     try {
-        const [team_id] = await pool.query(`
-            SELECT 
+        // Get team_id from team name
+        const [teamRows] = await pool.query(
+            `SELECT 
                 team_id 
             FROM 
                 teams 
             WHERE 
-                name = ?`, [team]
+                name = ? LIMIT 1`,
+            [team]
         );
+        if (!teamRows.length) {
+            return res.status(400).json({ error: 'Team not found' });
+        }
+        const team_id = teamRows[0].team_id;
 
-        const [result] = await pool.query(`
+        // Insert player
+        await pool.query(`
             INSERT INTO 
-                players (full_name, team_id, position, jersey_number, age) 
+                players (full_name, team_id, position, jersey_number, age)
             VALUES 
                 (?, ?, ?, ?, ?)`,
-            [name, team_id, position, jersey_number, age]
+            [full_name, team_id, position, jersey_number, age]
         );
+
+        // Return the new player
         const [newPlayer] = await pool.query(`
             SELECT 
                 * 
-            FROM  
+            FROM 
                 players 
             WHERE 
-                player_id = ?`, [result.insertId]);
+                full_name = ? 
+                ORDER BY player_id DESC LIMIT 1`,
+            [full_name]
+        );
         res.status(201).json(newPlayer[0]);
     } catch (err) {
         console.error(err);
