@@ -20,12 +20,23 @@ export const getAllMatches = async (req, res) => {
 export const getMatchById = async (req, res) => {
     try {
         const [rows] = await pool.query(`
-            SELECT 
-                * 
-            FROM 
-                matches 
-            WHERE 
-                match_id = ?`, [req.params.id]);
+        SELECT 
+            m.match_id,
+            m.date,
+            home.name AS home_team_name,
+            away.name AS away_team_name,
+            m.home_score,
+            m.away_score,
+            m.stadium,
+            m.status
+        FROM 
+            matches m
+        JOIN 
+            teams home ON m.home_team_id = home.team_id
+        JOIN 
+            teams away ON m.away_team_id = away.team_id
+        WHERE 
+            match_id = ?`, [req.params.id]);
         if (rows.length === 0) {
             return res.status(404).send('Match not found');
         }
@@ -144,7 +155,8 @@ export const updateMatch = async (req, res) => {
 export const deleteMatch = async (req, res) => {
     try {
         await pool.query(`
-            DELETE FROM matches
+            DELETE FROM 
+                matches
             WHERE
                 match_id = ?`, [req.params.id]);
         res.status(204).send();
@@ -158,7 +170,7 @@ export const searchMatches = async (req, res) => {
     const searchTerm = req.query.term;
 
     try {
-        const [home_team_id] = await pool.query(`
+        /*const [home_team_id] = await pool.query(`
             SELECT 
                 team_id 
             FROM 
@@ -174,21 +186,33 @@ export const searchMatches = async (req, res) => {
                 teams 
             WHERE 
                 name = ?`, [, `%${searchTerm}%`, ]
-        );
+        );*/
 
         const [rows] = await pool.query(`
-        SELECT * 
+        SELECT 
+            m.match_id,
+            m.date,
+            home.name AS home_team_name,
+            away.name AS away_team_name,
+            m.home_score,
+            m.away_score,
+            m.stadium,
+            m.status
         FROM 
-            matches 
+            matches m
+        JOIN 
+            teams home ON m.home_team_id = home.team_id
+        JOIN 
+            teams away ON m.away_team_id = away.team_id
         WHERE 
-            home_team_id LIKE ? 
+            home_team_name LIKE ? 
         OR 
-            away_team_id LIKE ? 
+            away_team_name LIKE ? 
         OR 
             stadium LIKE ?
         ORDER BY 
-            match_date DESC`,
-        [home_team_id, away_team_id, `%${searchTerm}%`]
+            m.date DESC`,
+        [`%${searchTerm}%`, `%${searchTerm}%`, `%${searchTerm}%`]
         );
         res.json(rows);
     } catch (err) {
