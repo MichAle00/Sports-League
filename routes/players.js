@@ -10,11 +10,11 @@ import {
 
 const router = Router();
  
-router.get('/players', get_players);
-router.get('/players/search', search);
-router.get('/players/search/stats/:id', search_stats);
-router.post('/players', add_player);
-router.put('/players/:id', update_player);
-router.delete('/players/:id', del_player);
+router.get('/', get_players);
+router.get('/search', search);
+router.get('/search/stats/:id', search_stats);
+router.post('/', add_player);
+router.put('/:id', update_player);
+router.delete('/:id', del_player);
  
 export default router;

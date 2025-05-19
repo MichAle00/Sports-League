@@ -120,7 +120,7 @@ export const addTeam = async (req, res) => {
             FROM 
                 teams 
             WHERE 
-                id = ?`, [result.insertId]);
+                team_id = ?`, [result.insertId]);
         res.status(201).json(newTeam[0]);
     } catch (err) {
         console.error(err);
@@ -141,7 +141,7 @@ export const upd_team = async (req, res) => {
                 stadium = ?,
                 coach = ?
             WHERE
-                id = ?`,
+                team_id = ?`,
             [name, city, founded_year, stadium, coach, teamId]
         );
         const [updatedTeam] = await pool.query(`
@@ -150,7 +150,7 @@ export const upd_team = async (req, res) => {
             FROM 
                 teams 
             WHERE 
-                id = ?`, [teamId]);
+                team_id = ?`, [teamId]);
         res.json(updatedTeam[0]);
     } catch (err) {
         console.error(err);
@@ -165,7 +165,7 @@ export const del_team = async (req, res) => {
             DELETE FROM 
                 teams 
             WHERE 
-                id = ?`, [teamId]);
+                team_id = ?`, [teamId]);
         res.status(204).send();
     } catch (err) {
         console.error(err);

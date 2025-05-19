@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	document.querySelectorAll('.delete-btn').forEach(btn => {
 		btn.addEventListener('click', function() {
 		const teamId = this.getAttribute('data-id');
-		if (confirm('Are you sure you want to delete this team?')) {
+		if (confirm('Seguro que desea eliminar este equipo?')) {
 			deleteTeam(teamId);
 		}
 		});
@@ -320,8 +320,8 @@ document.addEventListener('DOMContentLoaded', function() {
 	teamForm.reset();
 	isEditing = false;
 	currentTeamId = null;
-	document.getElementById('modalTitle').textContent = 'Add New Team';
-	document.getElementById('saveBtn').textContent = 'Save Team';
+	document.getElementById('modalTitle').textContent = 'Agregar Equipo';
+	document.getElementById('saveBtn').textContent = 'Guardar Equipo';
 	}
 
 	// Reset form when modal is closed

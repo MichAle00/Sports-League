@@ -160,9 +160,6 @@ document.addEventListener('DOMContentLoaded', function() {
 		document.getElementById('playerYellows').textContent = player.stats.yellow_cards;
 		document.getElementById('playerReds').textContent = player.stats.red_cards;
 		
-		// TODO: Load player events from another API endpoint if needed
-
-		
 		playerDetailsModal.show();
 		})
 		.catch(error => {
@@ -179,7 +176,12 @@ document.addEventListener('DOMContentLoaded', function() {
 		},
 		body: JSON.stringify(playerData)
 	})
-		.then(response => response.json())
+		.then(response => {
+			if (!response.ok) {
+				throw new Error(`Error status ${response.status}`);
+			}
+		return response.json();
+		})
 		.then(player => {
 		fetchPlayers();
 		playerModal.hide();
