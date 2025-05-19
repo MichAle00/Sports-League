@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	matchesList.innerHTML = '';
 	
 	if (matches.length === 0) {
-		matchesList.innerHTML = '<div class="col-12"><div class="alert alert-info">No matches scheduled yet.</div></div>';
+		matchesList.innerHTML = '<div class="col-12"><div class="alert alert-info">No hay partidos agendados aún</div></div>';
 		return;
 	}
 	
@@ -81,8 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
 			</div>
 			</div>
 			<div class="card-footer bg-transparent">
-			<button class="btn btn-sm btn-outline-primary me-2 edit-btn" data-id="${match.id}">Edit</button>
-			<button class="btn btn-sm btn-outline-danger delete-btn" data-id="${match.id}">Delete</button>
+			<button class="btn btn-sm btn-outline-primary me-2 edit-btn" data-id="${match.id}">Editar</button>
+			<button class="btn btn-sm btn-outline-danger delete-btn" data-id="${match.id}">Borrar</button>
 			</div>
 		</div>
 		`;
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	document.querySelectorAll('.delete-btn').forEach(btn => {
 		btn.addEventListener('click', function() {
 		const matchId = parseInt(this.getAttribute('data-id'));
-		if (confirm('Are you sure you want to delete this match?')) {
+		if (confirm('Seguro que quiere borrar este partido?')) {
 			deleteMatch(matchId);
 		}
 		});
@@ -142,9 +142,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		isEditing = true;
 		currentMatchId = matchId;
-		submitBtn.textContent = 'Update Match';
+		submitBtn.textContent = 'Actualizar partido';
 		cancelBtn.style.display = 'inline-block';
-		formTitle.textContent = 'Edit Match';
+		formTitle.textContent = 'Editar partido';
 		})
 		.catch(error => {
 		console.error('Error:', error);
@@ -188,9 +188,9 @@ document.addEventListener('DOMContentLoaded', function() {
 	matchForm.reset();
 	isEditing = false;
 	currentMatchId = null;
-	submitBtn.textContent = 'Add Match';
+	submitBtn.textContent = 'Agregar partido';
 	cancelBtn.style.display = 'none';
-	formTitle.textContent = 'Add New Match';
+	formTitle.textContent = 'Agregar nuevo partido';
 	}
 
 	// Helper function to get badge color based on status
