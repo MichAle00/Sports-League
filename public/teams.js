@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			</div>
 			<div class="card-footer bg-transparent d-flex justify-content-between">
 			<button class="btn btn-sm btn-outline-primary view-btn" data-id="${team.id}">
-				<i class="fas fa-eye"></i> View
+				<i class="fas fa-eye"></i> Ver
 			</button>
 			<div>
 				<button class="btn btn-sm btn-outline-secondary edit-btn" data-id="${team.id}">

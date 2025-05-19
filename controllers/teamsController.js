@@ -7,7 +7,8 @@ export const get_team = async (req, res) => {
             SELECT 
                 * 
             FROM 
-                teams`);
+                teams
+        `);
         res.json(rows);
     } catch (err) {
         console.error(err);
@@ -24,7 +25,8 @@ export const spec_team = async (req, res) => {
             FROM 
                 teams 
             WHERE 
-                team_id = ?`, [teamId]);
+                team_id = ?`, 
+            [teamId]);
 
         if (team.length === 0) {
             return res.status(404).send('Team not found');
@@ -37,7 +39,8 @@ export const spec_team = async (req, res) => {
             FROM 
                 players 
             WHERE 
-                team_id = ?`, [team[0].teamId]);
+                team_id = ?`, 
+            [team[0].teamId]);
 
         // Get team stats
         const [stats] = await pool.query(`
@@ -91,7 +94,7 @@ export const spec_team = async (req, res) => {
             OR away_team_id = ?
         )
         AND status = 'completed'
-    `, Array(10).fill(team[0].teamId));
+     `, Array(10).fill(team[0].teamId));
 
         res.json({
             ...team[0],
