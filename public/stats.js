@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			<img src="https://via.placeholder.com/40" alt="${topScorer.name}" class="player-avatar">
 			<div class="text-start">
 				<strong>${topScorer.name}</strong><br>
-				<small>${topScorer.team} • ${topScorer.goals || 0} goals</small>
+				<small>${topScorer.team} • ${topScorer.goals || 0} Goles</small>
 			</div>
 			`;
 		}
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			<img src="https://via.placeholder.com/40" alt="${topAssister.name}" class="player-avatar">
 			<div class="text-start">
 				<strong>${topAssister.name}</strong><br>
-				<small>${topAssister.team} • ${topAssister.assists || 0} assists</small>
+				<small>${topAssister.team} • ${topAssister.assists || 0} Asistencias</small>
 			</div>
 			`;
 		}
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			<img src="https://via.placeholder.com/40" alt="${mostYellows.name}" class="player-avatar">
 			<div class="text-start">
 				<strong>${mostYellows.name}</strong><br>
-				<small>${mostYellows.team} • ${mostYellows.yellow_cards || 0} yellows</small>
+				<small>${mostYellows.team} • ${mostYellows.yellow_cards || 0} Amarillas</small>
 			</div>
 			`;
 			
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			<img src="https://via.placeholder.com/40" alt="${mostReds.name}" class="player-avatar">
 			<div class="text-start">
 				<strong>${mostReds.name}</strong><br>
-				<small>${mostReds.team} • ${mostReds.red_cards || 0} reds</small>
+				<small>${mostReds.team} • ${mostReds.red_cards || 0} Rojas</small>
 			</div>
 			`;
 		}
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		container.innerHTML = '';
 		
 		if (players.length === 0) {
-			container.innerHTML = '<p class="text-muted">No data available</p>';
+			container.innerHTML = '<p class="text-muted">Sin datos</p>';
 			return;
 		}
 		
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				<small class="text-muted">${player.team}</small>
 				</div>
 			</div>
-			<span class="badge bg-success badge-lg">${player.goals || 0} goals</span>
+			<span class="badge bg-success badge-lg">${player.goals || 0} Goles</span>
 			`;
 			container.appendChild(playerElement);
 		});
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		container.innerHTML = '';
 		
 		if (players.length === 0) {
-			container.innerHTML = '<p class="text-muted">No data available</p>';
+			container.innerHTML = '<p class="text-muted">Sin datos</p>';
 			return;
 		}
 		
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				<small class="text-muted">${player.team}</small>
 				</div>
 			</div>
-			<span class="badge bg-info badge-lg">${player.assists || 0} assists</span>
+			<span class="badge bg-info badge-lg">${player.assists || 0} Asistencias</span>
 			`;
 			container.appendChild(playerElement);
 		});
@@ -171,8 +171,8 @@ document.addEventListener('DOMContentLoaded', function() {
 		redContainer.innerHTML = '';
 		
 		if (players.length === 0) {
-			yellowContainer.innerHTML = '<p class="text-muted">No data available</p>';
-			redContainer.innerHTML = '<p class="text-muted">No data available</p>';
+			yellowContainer.innerHTML = '<p class="text-muted">Sin datos</p>';
+			redContainer.innerHTML = '<p class="text-muted">Sin datos</p>';
 			return;
 		}
 		
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				<small class="text-muted">${player.team}</small>
 				</div>
 			</div>
-			<span class="badge bg-warning badge-lg">${player.yellow_cards || 0} yellows</span>
+			<span class="badge bg-warning badge-lg">${player.yellow_cards || 0} Amarillas</span>
 			`;
 			yellowContainer.appendChild(playerElement);
 		});
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				<small class="text-muted">${player.team}</small>
 				</div>
 			</div>
-			<span class="badge bg-danger badge-lg">${player.red_cards || 0} reds</span>
+			<span class="badge bg-danger badge-lg">${player.red_cards || 0} Rojas</span>
 			`;
 			redContainer.appendChild(playerElement);
 		});
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		container.innerHTML = '';
 		
 		if (matches.length === 0) {
-			container.innerHTML = '<p class="text-muted">No recent matches</p>';
+			container.innerHTML = '<p class="text-muted">Sin partidos recientes</p>';
 			return;
 		}
 		
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			} else if (match.status === 'ongoing') {
 			resultBadge = '<span class="badge bg-warning">LIVE</span>';
 			} else {
-			resultBadge = '<span class="badge bg-secondary">Scheduled</span>';
+			resultBadge = '<span class="badge bg-secondary">Programados</span>';
 			}
 			
 			matchElement.innerHTML = `

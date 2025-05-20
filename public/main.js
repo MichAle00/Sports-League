@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (upcomingMatches.length === 0) {
 			matchesContainer.innerHTML = `
 			<div class="col-12">
-				<div class="alert alert-info">No upcoming matches scheduled yet.</div>
+				<div class="alert alert-info">No hay partido agendados por venir aún.</div>
 			</div>
 			`;
 			return;
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			</div>
 			</div>
 			<div class="card-footer bg-transparent">
-			<a href="/manage" class="btn btn-sm btn-outline-primary w-100">View Details</a>
+			<a href="/manage" class="btn btn-sm btn-outline-primary w-100">Ver Detalles</a>
 			</div>
 		</div>
 			`;
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		console.error('Error loading matches:', error);
 		document.getElementById('matchesContainer').innerHTML = `
 			<div class="col-12">
-			<div class="alert alert-danger">Failed to load matches. Please try again later.</div>
+			<div class="alert alert-danger">Fallo al cargar partidos, intente más tarde.</div>
 			</div>
 		`;
 		});

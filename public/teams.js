@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		console.error('Error:', error);
 		teamsList.innerHTML = `
 			<div class="col-12">
-			<div class="alert alert-danger">FFallo al cargar los equipos. Intente de nuevo mas tarde</div>
+			<div class="alert alert-danger">Fallo al cargar equipos. Pruebe de nuevo más tarde.</div>
 			</div>
 		`;
 		});
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	if (teams.length === 0) {
 		teamsList.innerHTML = `
 		<div class="col-12">
-			<div class="alert alert-info">No se encontraron equipos.</div>
+			<div class="alert alert-info">No se encontraron equipos</div>
 		</div>
 		`;
 		return;
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			</div>
 			<div class="card-footer bg-transparent d-flex justify-content-between">
 			<button class="btn btn-sm btn-outline-primary view-btn" data-id="${team.id}">
-				<i class="fas fa-eye"></i> View
+				<i class="fas fa-eye"></i> Ver
 			</button>
 			<div>
 				<button class="btn btn-sm btn-outline-secondary edit-btn" data-id="${team.id}">
@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		} else {
 			playersTable.innerHTML = `
 			<tr>
-				<td colspan="5" class="text-center text-muted">No players found for this team</td>
+				<td colspan="5" class="text-center text-muted">No se encontraron jugadores para este equipo</td>
 			</tr>
 			`;
 		}
@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	fetch(`/api/teams/${teamId}`)
 		.then(response => response.json())
 		.then(team => {
-		document.getElementById('modalTitle').textContent = 'Edit Team';
+		document.getElementById('modalTitle').textContent = 'Editar Equipo';
 		document.getElementById('teamId').value = team.id;
 		document.getElementById('teamName').value = team.name;
 		document.getElementById('teamCity').value = team.city;
@@ -273,7 +273,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		
 		isEditing = true;
 		currentTeamId = teamId;
-		document.getElementById('saveBtn').textContent = 'Update Team';
+		document.getElementById('saveBtn').textContent = 'Actualizar equipo';
 		
 		teamModal.show();
 		})
