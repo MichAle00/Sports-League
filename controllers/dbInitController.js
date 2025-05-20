@@ -60,7 +60,7 @@ export const initDatabase = async (req, res) => {
         position ENUM('Portero', 'Medio-campo', 'Defensa', 'Delantero') NOT NULL,
         jersey_number INT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (team_id) REFERENCES teams(team_id)
+        FOREIGN KEY (team_id) REFERENCES teams(team_id) ON DELETE CASCADE
       )
     `);
 

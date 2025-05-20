@@ -160,15 +160,43 @@ export const upd_team = async (req, res) => {
 
 export const del_team = async (req, res) => {
     const teamId = req.params.id;
+    const connection = await pool.getConnection();
+    
     try {
-        await pool.query(`
+        await connection.beginTransaction();
+        
+        // Delete related players first
+        await connection.query(`
             DELETE FROM 
+                players 
+            WHERE 
+                team_id = ?`, 
+            [teamId]);
+        
+        // Then delete the team
+        const [result] = await connection.query(
+            `DELETE FROM 
                 teams 
             WHERE 
-                team_id = ?`, [teamId]);
-        res.status(204).send();
+                team_id = ?`, 
+            [teamId]
+        );
+        
+        if (result.affectedRows === 0) {
+            await connection.rollback();
+            return res.status(404).json({ error: 'Team not found' });
+        }
+        
+        await connection.commit();
+        res.status(204).send().json({ message: 'TEquipo borrado con exito' });
     } catch (err) {
-        console.error(err);
-        res.status(500).send('Server Error');
+        await connection.rollback();
+        console.error('Delete team error:', err);
+        res.status(500).json({ 
+            error: 'Database error',
+            details: err.message 
+        });
+    } finally {
+        connection.release();
     }
 };

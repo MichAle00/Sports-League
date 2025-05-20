@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		console.error('Error:', error);
 		teamsList.innerHTML = `
 			<div class="col-12">
-			<div class="alert alert-danger">Failed to load teams. Please try again later.</div>
+			<div class="alert alert-danger">FFallo al cargar los equipos. Intente de nuevo mas tarde</div>
 			</div>
 		`;
 		});
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	if (teams.length === 0) {
 		teamsList.innerHTML = `
 		<div class="col-12">
-			<div class="alert alert-info">No teams found.</div>
+			<div class="alert alert-info">No se encontraron equipos.</div>
 		</div>
 		`;
 		return;
